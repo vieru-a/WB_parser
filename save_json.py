@@ -1,3 +1,7 @@
+import requests
+import json
+
+
 headers = {
     "accept": "*/*",
     "accept-language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -26,3 +30,20 @@ params = {
     "spp": "30",
     "suppressSpellcheck": "false",
 }
+
+
+def get_data():
+    params["query"] = input("Введите название товара: ")
+    response = requests.get(
+        "https://search.wb.ru/exactmatch/ru/common/v7/search",
+        params=params,
+        headers=headers,
+    )
+    with open("data/data.json", "w", encoding="utf-8") as file:
+        json.dump(
+            response.json(),
+            file,
+            ensure_ascii=False,
+            indent=4,
+        )
+    print(f"Данные по запросу ({params['query']}) сохранены")
